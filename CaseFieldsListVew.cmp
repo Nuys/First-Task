@@ -1,0 +1,38 @@
+<aura:component controller="searchCaseController"  implements="flexipage:availableForAllPageTypes" access="global" >
+    
+    
+    <!--<aura:attribute name="searchTerm" type="String" default="input smth"/>
+    
+    <aura:attribute name="Message" type="boolean" default="false" description="use for display no record found message"/>
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="searchResult" type="List" description="use for store and display case list return from server"/>
+    <aura:attribute name="TotalNumberOfRecord" type="integer" default="0" description="use for display Number of records"/>-->
+    <!-- for lightning dataTable  -->
+    
+    <aura:attribute name="searchKeyWord" type="String" description="use for store user search input"/>
+    <aura:attribute name="pickList" type="String" default="All" required="true" access="global"/>
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    
+    
+    <lightning:spinner variant="brand" size="large" aura:id="Id_spinner" class="slds-hide" />
+    <lightning:card title="Case Search" iconName="standard:search">
+        
+        <lightning:input value="{!v.searchKeyWord}"
+                         required="true"
+                         placeholder="search Cases.."
+                         aura:id="searchField"
+                         label="Case search by field"/>
+        <lightning:button onclick="{!c.Search}"
+                          variant="brand"
+                          label="Search"
+                          iconName="utility:search"/> 
+        
+    </lightning:card>
+    
+      <div style="height: 300px">
+        <lightning:datatable data="{!v.data}" 
+                             keyField="id"
+                             columns="{!v.mycolumns}"/> 
+    </div>
+</aura:component>
