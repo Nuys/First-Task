@@ -1,0 +1,15 @@
+global class casePickList extends VisualEditor.DynamicPickList {
+global override VisualEditor.DataRow getDefaultValue(){
+       VisualEditor.DataRow defaultValue = new VisualEditor.DataRow('Case', 'Case');
+       return defaultValue;
+   }
+   global override VisualEditor.DynamicPickListRows getValues() {
+       Map<String, Schema.SObjectField> schemaFieldMap = Schema.SObjectType.Case.fields.getMap(); 
+       List<Schema.SObjectField> fieldList = schemaFieldMap.values();
+       VisualEditor.DynamicPickListRows  myValues = new VisualEditor.DynamicPickListRows();
+       for(Schema.SObjectField objectInstance :fieldList){
+           myValues.addRow(new VisualEditor.DataRow(objectInstance.getDescribe().getLabel(), objectInstance.getDescribe().getName()));
+       }
+       return myValues;
+   }
+}
