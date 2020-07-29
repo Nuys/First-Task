@@ -19,25 +19,27 @@ public with sharing class searchCaseController {
         String queryForCase = 'SELECT ' + String.join(fields, ', ') + ' FROM Case WHERE '+ typeOfField +' LIKE \'' + searchKey +'\' LIMIT 50';
 	 List<Case> caseList = Database.query(queryForCase);  
  	 Map<String, String> labels = new Map<String, String>();
-        Map<String, Schema.SObjectField> fieldMap = Schema.SObjectType.Case.fields.getMap();              
-        for(Schema.SObjectField objectInstance :fieldMap.values()){
-            labels.put(objectInstance.getDescribe().getName(), objectInstance.getDescribe().getLabel());
-        }
-        return new ResponseWrapper(fields, caseList, labels);
+        Map<String, Schema.SObjectField> fieldMap = Schema.SObjectType.Case.fields.getMap();
+        System.debug(fieldMap);
+        
+        
+         Schema.DescribeFieldResult dfrCaseNumber = fieldMap.get('CaseNumber').getDescribe();
+        Map<String, String> labelsCaseNumber = new Map<String, String>{'fieldName' => 'CaseNumber', 'label' => dfrCaseNumber.getLabel() , 'type' => 'text'};
+        Schema.DescribeFieldResult dfrDynamicField = fieldMap.get(typeField).getDescribe();
+        Map<String, String> labelsDynamickField = new Map<String, String>{'fieldName' => typeOfField, 'label' => dfrDynamicField.getLabel() , 'type' => 'text'};
+        List<Map<String, String>> listOfMaps = new List<Map<String, String>>{labelsCaseNumber,labelsDynamickField};
+		      
+        return new ResponseWrapper(fields,listOfMaps);
     }
         
     public class ResponseWrapper {
         @AuraEnabled
         public List<String> fields;
-        @AuraEnabled
-        public List<Case> objects;
-          @AuraEnabled
-        public Map<String, String> labels;
+        public List<Map<String, String>> listOfMaps;
         
-        public ResponseWrapper(List<String> fields, List<Case> objects, Map<String, String> labels) {
-            this.fields = fields; 
-            this.objects = objects;
-            this.labels = labels;
+        public ResponseWrapper(List<String> fields, List<Map<String, String>> listOfMaps) {
+            this.fields = fields;
+            this.listOfMaps = listOfMaps;
         }
         
     }
