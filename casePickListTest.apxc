@@ -1,0 +1,19 @@
+@isTest
+public class casePickListTest {
+    @isTest private static void testPickList(){
+        VisualEditor.DataRow defaultValue = new VisualEditor.DataRow('Status', 'Status');
+         Test.StartTest();
+        casePickList casePickList = new casePickList();
+        VisualEditor.DataRow rows = casePickList.getDefaultValue();
+             Test.stopTest();
+        system.equals(defaultValue.getValue(), rows.getValue());
+    }
+    @isTest private static void getValuesTest(){
+         Map<String, Schema.SObjectField> schemaFieldMap = Schema.SObjectType.Case.fields.getMap(); 
+          Test.StartTest();
+        casePickList casePickList = new casePickList();
+        VisualEditor.DynamicPickListRows rows = casePickList.getValues();
+             Test.stopTest();
+        system.assertequals(rows.size(), schemaFieldMap.size());
+    }
+}
