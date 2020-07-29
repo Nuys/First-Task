@@ -1,0 +1,44 @@
+public with sharing class searchCaseController {
+    
+    @AuraEnabled
+    public static ResponseWrapper fetchCase(String searchKeyWord, String typeField) {
+        String searchKey = searchKeyWord + '%';
+        String caseNumber = 'CaseNumber';
+        List <Case> returnList = new List <Case> ();
+		List<String> fields = new List<String>();
+		        
+		String typeOfField = typeField;
+          if(caseNumber.equals(typeField)){
+            fields.add(caseNumber);            
+        }
+        else {
+            fields.add(caseNumber);
+            fields.add(typeField);
+        }
+		
+        String queryForCase = 'SELECT ' + String.join(fields, ', ') + ' FROM Case WHERE '+ typeOfField +' LIKE \'' + searchKey +'\' LIMIT 50';
+	 List<Case> caseList = Database.query(queryForCase);  
+ 	 Map<String, String> labels = new Map<String, String>();
+        Map<String, Schema.SObjectField> fieldMap = Schema.SObjectType.Case.fields.getMap();              
+        for(Schema.SObjectField objectInstance :fieldMap.values()){
+            labels.put(objectInstance.getDescribe().getName(), objectInstance.getDescribe().getLabel());
+        }
+        return new ResponseWrapper(fields, caseList, labels);
+    }
+        
+    public class ResponseWrapper {
+        @AuraEnabled
+        public List<String> fields;
+        @AuraEnabled
+        public List<Case> objects;
+          @AuraEnabled
+        public Map<String, String> labels;
+        
+        public ResponseWrapper(List<String> fields, List<Case> objects, Map<String, String> labels) {
+            this.fields = fields; 
+            this.objects = objects;
+            this.labels = labels;
+        }
+        
+    }
+}
