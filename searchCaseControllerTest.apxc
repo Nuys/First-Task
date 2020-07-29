@@ -1,0 +1,16 @@
+@istest
+public class searchCaseControllerTest {
+    
+    @isTest private static void fetchCaseTest(){
+        Case caseTest = new Case(Status='Closed',
+                                 Priority = 'Medium',
+                                 Origin='Email');
+        
+       insert caseTest;
+            test.startTest();
+        searchCaseController searchCase = new searchCaseController();
+     test.stopTest();
+        
+        
+    }
+}
