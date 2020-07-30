@@ -2,17 +2,17 @@
 public class searchCaseControllerTest {
     
     @isTest private static void fetchCaseTest(){
-        Case caseTest = new Case(Status='Closed',
-                                 Priority = 'Medium',
-                                 Origin='Email');
+        Case insertTestCase = new Case(Origin = 'Email', Status = 'Closed');
+        insert insertTestCase ; 
         
-       insert caseTest;
-        Case selectCase = [SELECT Id FROM Case];
-            test.startTest();
-        searchCaseController.fetchCase('Closed','Status');
-     test.stopTest();
-        selectCase = [SELECT Id, Status, CaseNumber FROM Case];
-        System.assertEquals('Closed', selectCase.Status);
-
+        test.startTest();        
+        searchCaseController.ResponseWrapper resp = searchCaseController.fetchCase('Closed','Status');
+        test.stopTest();
+        
+        System.assertEquals(2, resp.listOfMaps.size());
+        Case testCase = [SELECT Id, CaseNumber, Status FROM Case LIMIT 1];
+       
+        System.assertEquals(true ,resp.objects.contains(testCase));
     }
 }
+
