@@ -7,10 +7,12 @@ public class searchCaseControllerTest {
                                  Origin='Email');
         
        insert caseTest;
+        Case selectCase = [SELECT Id FROM Case];
             test.startTest();
-        searchCaseController searchCase = new searchCaseController();
+        searchCaseController.fetchCase('Closed','Status');
      test.stopTest();
-        
-        
+        selectCase = [SELECT Id, Status, CaseNumber FROM Case];
+        System.assertEquals('Closed', selectCase.Status);
+
     }
 }
