@@ -6,7 +6,7 @@ public class casePickListTest {
         casePickList casePickList = new casePickList();
         VisualEditor.DataRow rows = casePickList.getDefaultValue();
              Test.stopTest();
-        system.assertEquals(defaultValue.getValue(), rows.getValue());
+        system.assertEquals(defaultValue.getLabel(), rows.getLabel());
     }
     @isTest private static void getValuesTest(){
          Map<String, Schema.SObjectField> schemaFieldMap = Schema.SObjectType.Case.fields.getMap(); 
