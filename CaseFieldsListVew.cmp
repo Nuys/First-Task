@@ -4,6 +4,7 @@
     <aura:attribute name="pickList" type="String" default="All" required="true" access="global"/>
     <aura:attribute name="data" type="Object"/>
     <aura:attribute name="mycolumns" type="List"/>
+    <aura:attribute name="isButtonActive" type="Boolean" default="true" />
     
     
     <lightning:spinner variant="brand" size="large" aura:id="Id_spinner" class="slds-hide" />
@@ -13,11 +14,14 @@
                          required="true"
                          placeholder="search Cases.."
                          aura:id="searchField"
-                         label="Case search"/>
+                         label="Case search"
+                         onchange = "{!c.activeButton}"/>
+        		
         <lightning:button onclick="{!c.Search}"
                           variant="brand"
                           label="Search"
-                          iconName="utility:search"/> 
+                          iconName="utility:search"
+                          disabled= "{!v.isButtonActive}"/> 
         
     </lightning:card> 
     
