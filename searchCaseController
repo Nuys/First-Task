@@ -2,41 +2,47 @@ public with sharing class searchCaseController {
     
     @AuraEnabled
     public static ResponseWrapper fetchCase(String searchKeyWord, String typeField) {
-        String searchKey = searchKeyWord + '%';
+        String searchKey ='%' + searchKeyWord + '%';
         String caseNumber = 'CaseNumber';
-        List <Case> returnList = new List <Case> ();
-		List<String> fields = new List<String>();
-		        
-		String typeOfField = typeField;
-          if(caseNumber.equals(typeField)){
+        List<String> fields = new List<String>();
+        List<Map<String, Object>> listOfMaps = new List<Map<String, Object>>();
+        String typeOfField = typeField;
+        if(caseNumber.equals(typeField)){
             fields.add(caseNumber);            
         }
         else {
             fields.add(caseNumber);
             fields.add(typeField);
         }
-		
-        String queryForCase = 'SELECT ' + String.join(fields, ', ') + ' FROM Case WHERE '+ typeOfField +' LIKE \'' + searchKey +'\' LIMIT 50';
-	 List<Case> caseList = Database.query(queryForCase);  
- 	 Map<String, String> labels = new Map<String, String>();
-        Map<String, Schema.SObjectField> fieldMap = Schema.SObjectType.Case.fields.getMap();
-
-         Schema.DescribeFieldResult dfrCaseNumber = fieldMap.get('CaseNumber').getDescribe();
-        Map<String, String> labelsCaseNumber = new Map<String, String>{'fieldName' => 'CaseNumber', 'label' => dfrCaseNumber.getLabel() , 'type' => 'text'};
-        Schema.DescribeFieldResult dfrDynamicField = fieldMap.get(typeField).getDescribe();
-        Map<String, String> labelsDynamickField = new Map<String, String>{'fieldName' => typeOfField, 'label' => dfrDynamicField.getLabel() , 'type' => 'text'};
-        List<Map<String, String>> listOfMaps = new List<Map<String, String>>{labelsCaseNumber,labelsDynamickField};
-		      
-        return new ResponseWrapper(listOfMaps, caseList);
-    }
         
+        String queryForCase = 'SELECT ' + String.join(fields, ', ') + ' FROM Case WHERE '+ typeOfField +' LIKE \'' + searchKey +'\' LIMIT 50';
+        List<Case> caseList = Database.query(queryForCase);  
+        Map<String, String> labels = new Map<String, String>();
+        Map<String, Schema.SObjectField> fieldMap = Schema.SObjectType.Case.fields.getMap();
+        
+        Schema.DescribeFieldResult dfrCaseNumber = fieldMap.get('CaseNumber').getDescribe();
+        
+        Map<String, Object> link = new Map<String, Object>{ 'target' => '_blank', 'label' => new Map<String, String>{'fieldName' => 'CaseNumber'}};
+            Map<String, Object> labelsCaseNumber = new Map<String, Object>{'fieldName' => 'CaseLink', 'label' => dfrCaseNumber.getLabel() , 'type' => 'url' , 'typeAttributes' => link};
+                Schema.DescribeFieldResult dfrDynamicField = fieldMap.get(typeField).getDescribe();
+       
+        if(!typeOfField.equals('CaseNumber')){
+        Map<String, Object> labelsDynamickField = new Map<String, String>{'fieldName' => typeOfField, 'label' => dfrDynamicField.getLabel() , 'type' => 'text'};
+            listOfMaps = new List<Map<String, Object>>{labelsCaseNumber,labelsDynamickField};
+              }else{
+                   listOfMaps = new List<Map<String, Object>>{labelsCaseNumber};
+               }
+                
+                return new ResponseWrapper(listOfMaps, caseList);
+    }
+    
     public class ResponseWrapper {
         @AuraEnabled
         public List<Case> objects;
         @AuraEnabled
-        public List<Map<String, String>> listOfMaps;
+        public List<Map<String, Object>> listOfMaps;
         
-        public ResponseWrapper( List<Map<String, String>> listOfMaps, List<Case> objects) {
+        public ResponseWrapper( List<Map<String, Object>> listOfMaps, List<Case> objects) {
             this.listOfMaps = listOfMaps;
             this.objects = objects;            
         }
