@@ -1,5 +1,6 @@
 ({
     Search: function(component, event, helper) {
+       
        var searchText = component.get('v.searchKeyWord');
         var typefield = component.get('v.pickList');
          console.log(typefield);
@@ -12,14 +13,16 @@
             if (state === 'SUCCESS') {
                 cases = response.getReturnValue().objects;
                 labels = response.getReturnValue().listOfMaps;
-                console.log(cases);
-                
+                cases.forEach(function(field){
+                    field.CaseLink = '/' + field.Id;
+                    });
             }
             component.set("v.data", cases);
-            
             component.set('v.mycolumns', labels);
+            
         });
         
         $A.enqueueAction(action);
-    }
+    },
+   
 })
