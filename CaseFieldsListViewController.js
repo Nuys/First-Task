@@ -1,7 +1,12 @@
 ({
     Search: function(component, event, helper) {
-       
+       let button = event.getSource();
+      
+   		 button.set('v.disabled',true);
        var searchText = component.get('v.searchKeyWord');
+        if(searchText.trim() == 0){
+            button.set('v.disabled',true);
+        }else{
         var typefield = component.get('v.pickList');
          console.log(typefield);
          var action = component.get('c.fetchCase');
@@ -23,6 +28,12 @@
         });
         
         $A.enqueueAction(action);
+        }
     },
-   
+      activeButton : function(component, event, helper){
+        let inputText = component.find("searchField").get("v.value");
+        if(inputText != null){
+            component.set('v.isButtonActive',false);
+        }       
+    },
 })
