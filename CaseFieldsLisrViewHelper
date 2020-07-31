@@ -1,0 +1,41 @@
+({
+	SearchCase : function(component, event) {
+		
+	let button = event.getSource();
+        
+        button.set('v.disabled',true);
+        var searchText = component.get('v.searchKeyWord');
+        if(searchText.trim() == 0){
+            button.set('v.disabled',true);
+        }else{
+            var typefield = component.get('v.pickList');
+            var recordsPerPage = component.get('v.recordsPerPage'); 
+            
+            var pageNumber = component.get('v.pageNumber')|| 1;
+            
+            console.log(typefield);
+            var action = component.get('c.fetchCase');
+            action.setParams({searchKeyWord:searchText, typeField: typefield, recordsPerPage:recordsPerPage, pageNumber: pageNumber} );
+            action.setCallback(this, function(response) {
+                var state = response.getState();
+                var cases;
+                var labels;
+                if (state === 'SUCCESS') {
+                    cases = response.getReturnValue().objects;
+                    labels = response.getReturnValue().listOfMaps;
+                    cases.forEach(function(field){
+                        field.CaseLink = '/' + field.Id;
+                    });
+                }
+                component.set("v.dataSize", cases.length);
+                component.set("v.data", cases);
+                component.set('v.mycolumns', labels);
+                
+                
+            });
+            
+            $A.enqueueAction(action);
+        }
+    },
+    
+})
