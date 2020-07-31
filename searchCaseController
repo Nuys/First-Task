@@ -1,7 +1,14 @@
 public with sharing class searchCaseController {
     
     @AuraEnabled
-    public static ResponseWrapper fetchCase(String searchKeyWord, String typeField) {
+    public static ResponseWrapper fetchCase(String searchKeyWord, String typeField, String recordsPerPage, Integer pageNumber) {
+        Integer pageSize = Integer.valueOf(recordsPerPage);
+        System.debug(pageSize);
+         Integer offset = ( pageNumber - 1) * pageSize;
+       System.debug(offset);
+        
+        String sInteger = String.valueOf(offset);
+             String sInteger2 = String.valueOf(pageSize);
         String searchKey ='%' + searchKeyWord + '%';
         String caseNumber = 'CaseNumber';
         List<String> fields = new List<String>();
@@ -14,8 +21,9 @@ public with sharing class searchCaseController {
             fields.add(caseNumber);
             fields.add(typeField);
         }
+       
+        String queryForCase = 'SELECT ' + String.join(fields, ', ') + ' FROM Case WHERE '+ typeOfField +' LIKE \'' + searchKey +'\' LIMIT ' + sInteger2 + ' OFFSET ' + sInteger;
         
-        String queryForCase = 'SELECT ' + String.join(fields, ', ') + ' FROM Case WHERE '+ typeOfField +' LIKE \'' + searchKey +'\' LIMIT 50';
         List<Case> caseList = Database.query(queryForCase);  
         Map<String, String> labels = new Map<String, String>();
         Map<String, Schema.SObjectField> fieldMap = Schema.SObjectType.Case.fields.getMap();
@@ -32,11 +40,12 @@ public with sharing class searchCaseController {
               }else{
                    listOfMaps = new List<Map<String, Object>>{labelsCaseNumber};
                }
-                
+        
                 return new ResponseWrapper(listOfMaps, caseList);
     }
     
     public class ResponseWrapper {
+         
         @AuraEnabled
         public List<Case> objects;
         @AuraEnabled
