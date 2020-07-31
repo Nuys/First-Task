@@ -1,10 +1,16 @@
 <aura:component controller="searchCaseController"  implements="flexipage:availableForAllPageTypes" access="global" >
-	
+    
     <aura:attribute name="searchKeyWord" type="String" description="use for store user search input"/>
     <aura:attribute name="pickList" type="String" default="All" required="true" access="global"/>
     <aura:attribute name="data" type="Object"/>
     <aura:attribute name="mycolumns" type="List"/>
     <aura:attribute name="isButtonActive" type="Boolean" default="true" />
+    <aura:attribute name="recordsPerPage" type="String" required="true" access="global" default="5"/>
+    <aura:attribute name="pageNumber" type="Integer" default="1"/>
+    <aura:attribute name="isLastPage" type="Boolean" default="false"/>
+    <aura:attribute name="dataSize" type="Integer" default="0"/> 
+    
+    
     
     
     <lightning:spinner variant="brand" size="large" aura:id="Id_spinner" class="slds-hide" />
@@ -16,18 +22,34 @@
                          aura:id="searchField"
                          label="Case search"
                          onchange = "{!c.activeButton}"/>
-        		
+        
         <lightning:button onclick="{!c.Search}"
                           variant="brand"
                           label="Search"
                           iconName="utility:search"
                           disabled= "{!v.isButtonActive}"/> 
         
-    </lightning:card> 
+        
+        
+        <div style="height: 300px">
+            <lightning:datatable  aura:id="accountDataTable"
+                                 data="{!v.data}" 
+                                 keyField="id"
+                                 columns="{!v.mycolumns}"
+                                 hideCheckboxColumn="true"
+                                 /> 
+        </div>
+        <div class="slds-clearfix">
+            <div class="slds-page-header" role="banner">
+                <div class="slds-float_right">            
+                    <lightning:button label="Prev" iconName="utility:chevronleft" iconPosition="left"
+                                      onclick="{!c.handlePrev}" disabled="{! v.pageNumber == 1}"/>
+                    <lightning:button label="Next" iconName="utility:chevronright" iconPosition="right"
+                                      disabled="{! v.isLastPage}" onclick="{!c.handleNext}"/>
+                </div>
+                <p >Page {!v.pageNumber} | Showing records from {! ((v.pageNumber-1)*v.recordsPerPage)+' to '+((v.pageNumber-1)*v.recordsPerPage+v.dataSize)}</p>
+            </div>
+        </div>
+    </lightning:card>
     
-      <div style="height: 300px">
-        <lightning:datatable data="{!v.data}" 
-                             keyField="id"
-                             columns="{!v.mycolumns}"/> 
-    </div>
 </aura:component>
