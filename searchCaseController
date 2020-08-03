@@ -1,8 +1,8 @@
 public with sharing class searchCaseController {
     
     @AuraEnabled
-    public static ResponseWrapper fetchCase(String searchKeyWord, String typeField, String recordsPerPage, Integer pageNumber) {
-        Integer pageSize = Integer.valueOf(recordsPerPage);
+    public static ResponseWrapper fetchCase(String searchKeyWord, String typeField, Integer recordsPerPage, Integer pageNumber) {
+        Integer pageSize = recordsPerPage;
         System.debug(pageSize);//10
          Integer offset = ( pageNumber - 1) * pageSize;
        System.debug(offset);//0
