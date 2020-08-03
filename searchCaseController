@@ -3,12 +3,14 @@ public with sharing class searchCaseController {
     @AuraEnabled
     public static ResponseWrapper fetchCase(String searchKeyWord, String typeField, String recordsPerPage, Integer pageNumber) {
         Integer pageSize = Integer.valueOf(recordsPerPage);
-        System.debug(pageSize);
+        System.debug(pageSize);//10
          Integer offset = ( pageNumber - 1) * pageSize;
-       System.debug(offset);
+       System.debug(offset);//0
         
         String sInteger = String.valueOf(offset);
+         System.debug(sInteger);//0
              String sInteger2 = String.valueOf(pageSize);
+                 System.debug(sInteger2);//10
         String searchKey ='%' + searchKeyWord + '%';
         String caseNumber = 'CaseNumber';
         List<String> fields = new List<String>();
