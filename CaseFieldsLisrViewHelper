@@ -2,12 +2,12 @@
 	SearchCase : function(component, event) {
 		
 	let button = event.getSource();
-        
-        button.set('v.disabled',true);
         var searchText = component.get('v.searchKeyWord');
         if(searchText.trim() == 0){
             button.set('v.disabled',true);
         }else{
+            button = event.getSource();
+            button.set('v.disabled',false);
             var typefield = component.get('v.pickList');
             var recordsPerPage = component.get('v.recordsPerPage'); 
             
