@@ -11,7 +11,7 @@
             
             var pageNumber = component.get('v.pageNumber')|| 1;
             
-            console.log(typefield);
+            
             var action = component.get('c.fetchCase');
             action.setParams({searchKeyWord:searchText, typeField: typefield, recordsPerPage:recordsPerPage, pageNumber: pageNumber} );
             action.setCallback(this, function(response) {
@@ -24,13 +24,8 @@
                     labels = response.getReturnValue().listOfMaps;
                     pages = response.getReturnValue().countPages;
                     var resultData = response.getReturnValue().objects;
-                    console.log(resultData);
-                    console.log(recordsPerPage);
-                   /* if(resultData.length < component.get("v.recordsPerPage")){
-                        component.set("v.isLastPage", true);
-                    } else{
-                        component.set("v.isLastPage", false);
-                    }*/
+                    
+                  
                     cases.forEach(function(field){
                         field.CaseLink = '/' + field.Id;
                     });
@@ -51,14 +46,23 @@
         var recordsPerPage = component.get('v.recordsPerPage'); 
         var searchText = component.get('v.searchKeyWord');
         var someAction = component.get('c.countPages');
-        var countOfPages = component.get("v.countPages");
+       
         someAction.setParams({searchKeyWord:searchText, recordsPerPage:recordsPerPage, typeField: typefield} );
+       
         someAction.setCallback(this, function(response) {
             var state = response.getState();
             var pages;
             if (state === 'SUCCESS') {
                 pages = response.getReturnValue();
                 component.set("v.countPages",pages);
+                 
+               var disableButtonNext = component.get("v.countPages");
+        
+        if(disableButtonNext == 1){
+            component.set('v.isLastPage', true);
+        }else{
+             component.set('v.isLastPage', false);
+        }
             }
         })
         $A.enqueueAction(someAction);
