@@ -2,6 +2,11 @@
     Search: function(component, event, helper) {
         helper.SearchCase(component, event);   
         helper.countPages(component, event);
+        var disableButtonNext = component.get("v.countPages");
+        console.log(disableButtonNext);
+        if(disableButtonNext == 0){
+            component.set('v.isLastPage', true);
+        }
         
     },
     activeButton : function(component, event, helper){
