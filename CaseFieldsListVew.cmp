@@ -18,7 +18,7 @@
     <lightning:spinner variant="brand" size="large" aura:id="Id_spinner" class="slds-hide" />
     <lightning:card title="Case Search" iconName="standard:search">
         
-        <form class="slds-form--inline">
+        <form class="slds-form--inline slds-has-top-magnet ">
             <div class="slds-form-element">
                 <div class="slds-form-element__control">
                     
@@ -42,9 +42,9 @@
                                   iconName="utility:search"
                                   disabled= "{!empty(v.searchKeyWord)}"
                                   class="slds-button"/>
-                
             </div>
         </form>
+        
         
         <div style="height: 300px">
             <lightning:datatable  aura:id="accountDataTable"
@@ -54,24 +54,27 @@
                                  columns="{!v.mycolumns}"
                                  hideCheckboxColumn="true"
                                  /> 
-            
         </div>
-         <form class="slds-form--inline">
-            <div class="slds-form-element">
-                <div class="slds-form-element__control">
-                <div class="slds-panel__body" role="banner">
-                             
-                        <lightning:button aura:id="prevButton" label="Prev" iconName="utility:chevronleft" iconPosition="left"
-                                          onclick="{!c.handlePrev}" disabled="{!v.pageNumber == 1}"/>
-                        <lightning:button aura:id="nextButton" label="Next" iconName="utility:chevronright" iconPosition="right"
-                                          disabled="{!v.isLastPage}" onclick="{!c.handleNext}"/>
-                        </div>
+        
+        <form class="slds-form--inline">
+            <div class="slds-panel__body" role="banner">
+                
+                <div class="slds-form-element">
+                    <lightning:button aura:id="prevButton" label="Prev" iconName="utility:chevronleft" iconPosition="left"
+                                      onclick="{!c.handlePrev}" disabled="{!v.pageNumber == 1}"/>
+                </div>
+                
+                <div class="slds-form-element">    
+                    <p class="slds-box slds-box_xx-small slds-theme_default slds-grid_vertical-align-center ">Page {!v.pageNumber}</p>
+                </div>
+                
+                <div class="slds-form-element">  
+                    <lightning:button aura:id="nextButton" label="Next" iconName="utility:chevronright" iconPosition="right"
+                                      disabled="{!v.isLastPage}" onclick="{!c.handleNext}"/>
+                </div>
             </div>
             
-                           <div class="slds-form-element__control">
-                        <span class="slds-box slds-box_xx-small slds-theme_default slds-grid_vertical-align-center ">Page {!v.pageNumber} | Showing records from {! ((v.pageNumber-1)*v.recordsPerPage)+' to '+((v.pageNumber-1)*v.recordsPerPage+v.dataSize)}</span>
-                    </div>
-                </div>
+            
         </form>
     </lightning:card>
     
