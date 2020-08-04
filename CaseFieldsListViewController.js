@@ -2,16 +2,28 @@
     Search: function(component, event, helper) {
         helper.SearchCase(component, event);   
         helper.countPages(component, event);
-        
+    },
+    handleKeyUp: function (component, event, helper) {
+       
+        var testButton = event.keyCode;
+        console.log(testButton);
+        if(testButton === 13){
+             event.preventDefault();
+            console.log(testButton);
+            helper.SearchCase(component, event); 
+            
+            helper.countPages(component, event);
+            
+        }
         
     },
     activeButton : function(component, event, helper){
         
         
         var test = component.get("v.searchKeyWord");
-        console.log(test.trim());
+        
         if(!test.trim()){
-           //component.set('v.') 
+            
             component.set('v.isLastPage',true);
             component.set('v.pageNumber', 1);
             component.set('v.searchButton', true);
@@ -51,6 +63,10 @@
         }
         helper.SearchCase(component, event);
         
-    },
+    }, 
+    
+    
+    
+    
     
 })
