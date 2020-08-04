@@ -3,8 +3,8 @@
         
         let button = event.getSource();
         var searchText = component.get('v.searchKeyWord');
-      	searchText = searchText.trim();
-       if (!!searchText){
+        searchText = searchText.trim();
+        if (!!searchText){
             component.set('v.isButtonActive',false);
             var typefield = component.get('v.pickList');
             var recordsPerPage = component.get('v.recordsPerPage'); 
@@ -25,7 +25,7 @@
                     pages = response.getReturnValue().countPages;
                     var resultData = response.getReturnValue().objects;
                     
-                  
+                    
                     cases.forEach(function(field){
                         field.CaseLink = '/' + field.Id;
                     });
@@ -37,32 +37,32 @@
             });
             
             $A.enqueueAction(action);
-       }else{
-           component.set("v.isButtonActive", true);
-       }
+        }else{
+            component.set("v.isButtonActive", true);
+        }
     },
     countPages: function(component, event){
         var typefield = component.get('v.pickList');
         var recordsPerPage = component.get('v.recordsPerPage'); 
         var searchText = component.get('v.searchKeyWord');
         var someAction = component.get('c.countPages');
-       
+        
         someAction.setParams({searchKeyWord:searchText, recordsPerPage:recordsPerPage, typeField: typefield} );
-       
+        
         someAction.setCallback(this, function(response) {
             var state = response.getState();
             var pages;
             if (state === 'SUCCESS') {
                 pages = response.getReturnValue();
                 component.set("v.countPages",pages);
-                 
-               var disableButtonNext = component.get("v.countPages");
-        
-        if(disableButtonNext == 1){
-            component.set('v.isLastPage', true);
-        }else{
-             component.set('v.isLastPage', false);
-        }
+                
+                var disableButtonNext = component.get("v.countPages");
+                
+                if(disableButtonNext == 1 || disableButtonNext==0){
+                    component.set('v.isLastPage', true);
+                }else{
+                    component.set('v.isLastPage', false);
+                }
             }
         })
         $A.enqueueAction(someAction);
