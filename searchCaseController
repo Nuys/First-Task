@@ -2,6 +2,7 @@ public with sharing class searchCaseController {
     
     @AuraEnabled
     public static ResponseWrapper fetchCase(String searchKeyWord, String typeField, Integer recordsPerPage, Integer pageNumber) {
+     
         Integer pageSize = recordsPerPage;
         System.debug(pageSize);//10
          Integer offset = ( pageNumber - 1) * pageSize;
@@ -43,6 +44,8 @@ public with sharing class searchCaseController {
                    listOfMaps = new List<Map<String, Object>>{labelsCaseNumber};
                }
         
+       
+
                 return new ResponseWrapper(listOfMaps, caseList);
     }
     
@@ -53,10 +56,19 @@ public with sharing class searchCaseController {
         @AuraEnabled
         public List<Map<String, Object>> listOfMaps;
         
+        
         public ResponseWrapper( List<Map<String, Object>> listOfMaps, List<Case> objects) {
             this.listOfMaps = listOfMaps;
-            this.objects = objects;            
+            this.objects = objects;
         }
         
     }
+     @AuraEnabled
+    public static Integer countPages(String searchKeyWord, Integer recordsPerPage, String typeField){
+        Integer pages = 0;
+         String countPages = 'SELECT count() FROM Case WHERE '+ typeField +' LIKE \'' + searchKeyWord +  '\'';
+        		Integer caseCount= Database.countQuery(countPages);
+           pages = (Integer)Math.ceil(((double)caseCount)/recordsPerPage);
+        return pages;
+    } 
 }
