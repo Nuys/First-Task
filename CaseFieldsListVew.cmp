@@ -11,7 +11,7 @@
     <aura:attribute name="dataSize" type="Integer" default="1" required="true"/> 
     <aura:attribute name="countPages" type="Integer" default="0" />
     <aura:attribute name="searchButton" type="Boolean" default="true"/>
-    
+    <aura:attribute name="issearching" type="Boolean" default="false"/>
     
     
     
@@ -20,21 +20,23 @@
         
         <form class="slds-form--inline slds-has-top-magnet ">
             <div class="slds-form-element">
-                <div class="slds-form-element__control">
+                <div class="slds-form-element__control" >
                     
-                    
-                    <lightning:input value="{!v.searchKeyWord}"
-                                     required="true"
-                                     type="search"
-                                     placeholder="search Cases"
-                                     aura:id="searchField"
-                                     label="Case search"
-                                     onchange="{!c.activeButton}"/>
-                    
+                    <span onkeypress="{!c.handleKeyUp}">
+                        <lightning:input value="{!v.searchKeyWord}"
+                                         onchange="{!c.activeButton}"
+                                         isLoading="{! v.issearching }"
+                                         required="true"
+                                         type="search"
+                                         placeholder="Search Cases"
+                                         aura:id="searchField"
+                                         label="Case search"
+                                         />
+                    </span>
                 </div>
             </div>
             
-            <div class="slds-form-element__control">
+            <div class="slds-form-element__control" >
                 <lightning:button aura:id="buttonSearch" 
                                   onclick="{!c.Search}"
                                   variant="brand"
@@ -51,7 +53,6 @@
                 <lightning:datatable  aura:id="accountDataTable"
                                      data="{!v.data}" 
                                      keyField="id"
-                                     
                                      columns="{!v.mycolumns}"
                                      hideCheckboxColumn="true"
                                      /> 
