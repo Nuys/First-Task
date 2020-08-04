@@ -1,22 +1,55 @@
 ({
     Search: function(component, event, helper) {
-        helper.SearchCase(component, event); 
+        helper.SearchCase(component, event);   
+        helper.countPages(component, event);
+        
     },
     activeButton : function(component, event, helper){
-        let inputText = component.find("searchField").get("v.value");
-        if(inputText != null){
-            component.set('v.isButtonActive',false);
-        }       
+       
+        
+        var test = component.get("v.searchKeyWord");
+        console.log(test.trim());
+        if(!test.trim()){
+         
+            component.set('v.isLastPage',true);
+            component.set('v.pageNumber', 1);
+            
+        }else{
+             component.set('v.isLastPage',false);
+           
+        }     
     },
-        handleNext : function(component, event, helper) { 
+    handleNext : function(component, event, helper) { 
+        var allPages = component.get("v.countPages");
+	var isDisabled = component.find('nextButton'); 
+        
+        var countPages = component.get("v.countPages");
         var pageNumber = component.get("v.pageNumber");
+       
+      
         component.set("v.pageNumber", pageNumber+1);
-        helper.SearchCase(component, event); //not work 
-        },
-     handlePrev : function(component, event, helper) {        
-        var pageNumber = component.get("v.pageNumber");
+      
+        if(pageNumber + 1 == countPages ){
+            component.set("v.isLastPage", true);
+        }
+       
+        helper.SearchCase(component, event); 
+		
+    },
+    handlePrev : function(component, event, helper) {  
+          
+        var countPages = component.get("v.countPages");
+         var pageNumber = component.get("v.pageNumber");
+       
         component.set("v.pageNumber", pageNumber-1);
-         helper.SearchCase(component, event);
+        pageNumber = component.get("v.pageNumber");
+      
+        if(pageNumber < countPages ){
+            component.set("v.isLastPage", false);
+            
+        }
+        helper.SearchCase(component, event);
+        
     },
     
 })
