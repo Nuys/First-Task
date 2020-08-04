@@ -8,9 +8,9 @@
     <aura:attribute name="recordsPerPage" type="Integer" required="true" access="global" default="5"/>
     <aura:attribute name="pageNumber" type="Integer" default="1"/>
     <aura:attribute name="isLastPage" type="Boolean" default="true" required="true"/>
-    <aura:attribute name="dataSize" type="Integer" default="0" required="true"/> 
+    <aura:attribute name="dataSize" type="Integer" default="1" required="true"/> 
     <aura:attribute name="countPages" type="Integer" default="0" />
-    
+    <aura:attribute name="searchButton" type="Boolean" default="true"/>
     
     
     
@@ -40,42 +40,53 @@
                                   variant="brand"
                                   label="Search"
                                   iconName="utility:search"
-                                  disabled= "{!empty(v.searchKeyWord)}"
+                                  disabled= "{!v.searchButton}"
                                   class="slds-button"/>
             </div>
         </form>
         
-        
-        <div style="height: 300px">
-            <lightning:datatable  aura:id="accountDataTable"
-                                 data="{!v.data}" 
-                                 keyField="id"
-                                 
-                                 columns="{!v.mycolumns}"
-                                 hideCheckboxColumn="true"
-                                 /> 
-        </div>
-        
-        <form class="slds-form--inline">
-            <div class="slds-panel__body" role="banner">
-                
-                <div class="slds-form-element">
-                    <lightning:button aura:id="prevButton" label="Prev" iconName="utility:chevronleft" iconPosition="left"
-                                      onclick="{!c.handlePrev}" disabled="{!v.pageNumber == 1}"/>
-                </div>
-                
-                <div class="slds-form-element">    
-                    <p class="slds-box slds-box_xx-small slds-theme_default slds-grid_vertical-align-center ">Page {!v.pageNumber}</p>
-                </div>
-                
-                <div class="slds-form-element">  
-                    <lightning:button aura:id="nextButton" label="Next" iconName="utility:chevronright" iconPosition="right"
-                                      disabled="{!v.isLastPage}" onclick="{!c.handleNext}"/>
-                </div>
+        <aura:if isTrue="{!v.countPages != 0}">
+            
+            <div style="height: 300px">
+                <lightning:datatable  aura:id="accountDataTable"
+                                     data="{!v.data}" 
+                                     keyField="id"
+                                     
+                                     columns="{!v.mycolumns}"
+                                     hideCheckboxColumn="true"
+                                     /> 
             </div>
             
-            
-        </form>
+            <form class="slds-form--inline">
+                <div class="slds-panel__body" role="banner">
+                    
+                    <div class="slds-form-element">
+                        <lightning:button aura:id="prevButton" label="Prev" iconName="utility:chevronleft" iconPosition="left"
+                                          onclick="{!c.handlePrev}" disabled="{!v.pageNumber == 1}"/>
+                    </div>
+                    
+                    <div class="slds-form-element">    
+                        <p class="slds-box slds-box_xx-small slds-theme_default slds-grid_vertical-align-center ">Page {!v.pageNumber}/{!v.countPages}</p>
+                    </div>
+                    
+                    <div class="slds-form-element">  
+                        <lightning:button aura:id="nextButton" label="Next" iconName="utility:chevronright" iconPosition="right"
+                                          disabled="{!v.isLastPage}" onclick="{!c.handleNext}"/>
+                    </div>
+                </div>
+                
+                
+            </form>
+            <aura:set attribute="else">
+                <aura:if isTrue="{!v.dataSize == 0}">
+                    <p>Records was not found</p>
+                    <aura:set attribute="else">
+                        <p></p>
+                    </aura:set>
+                    
+                </aura:if>
+            </aura:set>
+        </aura:if>
     </lightning:card>
     
 </aura:component>
