@@ -2,19 +2,15 @@
     Search: function(component, event, helper) {
         helper.SearchCase(component, event);   
         helper.countPages(component, event);
-        var disableButtonNext = component.get("v.countPages");
-        console.log(disableButtonNext);
-        if(disableButtonNext == 0){
-            component.set('v.isLastPage', true);
-        }
+       
         
     },
     activeButton : function(component, event, helper){
        
         
-        var validIsInputBlank = component.get("v.searchKeyWord");
-      
-        if(!validIsInputBlank.trim()){
+        var test = component.get("v.searchKeyWord");
+        console.log(test.trim());
+        if(!test.trim()){
          
             component.set('v.isLastPage',true);
             component.set('v.pageNumber', 1);
@@ -25,7 +21,7 @@
         }     
     },
     handleNext : function(component, event, helper) { 
-        var allPages = component.get("v.countPages");
+        
 	var isDisabled = component.find('nextButton'); 
         
         var countPages = component.get("v.countPages");
@@ -33,7 +29,7 @@
        
       
         component.set("v.pageNumber", pageNumber+1);
-      
+      	
         if(pageNumber + 1 == countPages ){
             component.set("v.isLastPage", true);
         }
