@@ -12,9 +12,9 @@
     activeButton : function(component, event, helper){
        
         
-        var test = component.get("v.searchKeyWord");
-        console.log(test.trim());
-        if(!test.trim()){
+        var validIsInputBlank = component.get("v.searchKeyWord");
+      
+        if(!validIsInputBlank.trim()){
          
             component.set('v.isLastPage',true);
             component.set('v.pageNumber', 1);
