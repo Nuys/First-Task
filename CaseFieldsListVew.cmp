@@ -21,7 +21,7 @@
      <form class="slds-form--inline">
   <div class="slds-form-element">
        <div class="slds-form-element__control">
-             <!--<div class="searchWrapper">-->
+           
                 
         <lightning:input value="{!v.searchKeyWord}"
                          required="true"
@@ -42,7 +42,7 @@
                           iconName="utility:search"
                           disabled= "{!empty(v.searchKeyWord)}"
                           class="slds-button"/>
-                 <!-- </div>-->
+               
                  </div>
  </form>
             
