@@ -1,7 +1,7 @@
 ({
     SearchCase : function(component, event) {
         
-        let button = event.getSource();
+        
         var searchText = component.get('v.searchKeyWord');
         searchText = searchText.trim();
         if (!!searchText){
