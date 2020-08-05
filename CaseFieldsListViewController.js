@@ -1,10 +1,11 @@
 ({
     Search: function(component, event, helper) {
+        
         helper.SearchCase(component, event);   
         helper.countPages(component, event);
     },
     handleKeyUp: function (component, event, helper) {
-       
+       component.set('v.pageNumber', 1);
         var testButton = event.keyCode;
         console.log(testButton);
         if(testButton === 13){
