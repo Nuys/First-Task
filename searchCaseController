@@ -2,16 +2,16 @@ public with sharing class searchCaseController {
     
     @AuraEnabled
     public static ResponseWrapper fetchCase(String searchKeyWord, String typeField, Integer recordsPerPage, Integer pageNumber) {
-     
+        
         Integer pageSize = recordsPerPage;
-       
-         Integer offset = ( pageNumber - 1) * pageSize;
-       
+        
+        Integer offset = ( pageNumber - 1) * pageSize;
+        
         
         String ofssetToString = String.valueOf(offset);
-     
-             String pageSizeToString = String.valueOf(pageSize);
-                 
+        
+        String pageSizeToString = String.valueOf(pageSize);
+        
         String searchKey ='%' + searchKeyWord + '%';
         String caseNumber = 'CaseNumber';
         List<String> fields = new List<String>();
@@ -24,7 +24,7 @@ public with sharing class searchCaseController {
             fields.add(caseNumber);
             fields.add(typeField);
         }
-       
+        
         String queryForCase = 'SELECT ' + String.join(fields, ', ') + ' FROM Case WHERE '+ typeOfField +' LIKE \'' + searchKey +'\' LIMIT ' + pageSizeToString + ' OFFSET ' + ofssetToString;
         
         List<Case> caseList = Database.query(queryForCase);  
@@ -36,21 +36,21 @@ public with sharing class searchCaseController {
         Map<String, Object> link = new Map<String, Object>{ 'target' => '_blank', 'label' => new Map<String, String>{'fieldName' => 'CaseNumber'}};
             Map<String, Object> labelsCaseNumber = new Map<String, Object>{'fieldName' => 'CaseLink', 'label' => dfrCaseNumber.getLabel() , 'type' => 'url' , 'typeAttributes' => link};
                 Schema.DescribeFieldResult dfrDynamicField = fieldMap.get(typeField).getDescribe();
-       
-        if(!typeOfField.equals('CaseNumber')){
-        Map<String, Object> labelsDynamickField = new Map<String, String>{'fieldName' => typeOfField, 'label' => dfrDynamicField.getLabel() , 'type' => 'text'};
-            listOfMaps = new List<Map<String, Object>>{labelsCaseNumber,labelsDynamickField};
-              }else{
-                   listOfMaps = new List<Map<String, Object>>{labelsCaseNumber};
-               }
         
-       
-
-                return new ResponseWrapper(listOfMaps, caseList);
+        if(!typeOfField.equals('CaseNumber')){
+            Map<String, Object> labelsDynamickField = new Map<String, String>{'fieldName' => typeOfField, 'label' => dfrDynamicField.getLabel() , 'type' => 'text'};
+                listOfMaps = new List<Map<String, Object>>{labelsCaseNumber,labelsDynamickField};
+                    }else{
+                        listOfMaps = new List<Map<String, Object>>{labelsCaseNumber};
+                            }
+        
+        
+        
+        return new ResponseWrapper(listOfMaps, caseList);
     }
     
     public class ResponseWrapper {
-         
+        
         @AuraEnabled
         public List<Case> objects;
         @AuraEnabled
@@ -63,12 +63,13 @@ public with sharing class searchCaseController {
         }
         
     }
-     @AuraEnabled
+    @AuraEnabled
     public static Integer countPages(String searchKeyWord, Integer recordsPerPage, String typeField){
+         String searchKey ='%' + searchKeyWord + '%';
         Integer pages = 0;
-         String countPages = 'SELECT count() FROM Case WHERE '+ typeField +' LIKE \'' + searchKeyWord +  '\'';
-        		Integer caseCount= Database.countQuery(countPages);
-           pages = (Integer)Math.ceil(((double)caseCount)/recordsPerPage);
+        String countPages = 'SELECT count() FROM Case WHERE '+ typeField +' LIKE \'' + searchKey +  '\'';
+        Integer caseCount= Database.countQuery(countPages);
+        pages = (Integer)Math.ceil(((double)caseCount)/recordsPerPage);
         return pages;
     } 
 }
