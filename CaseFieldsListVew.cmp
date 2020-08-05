@@ -20,7 +20,7 @@
         
         <form class="slds-form--inline slds-has-top-magnet ">
             <div class="slds-form-element">
-                <div class="slds-form-element__control" >
+                <div class="slds-form-element__control">
                     
                     <span onkeypress="{!c.handleKeyUp}">
                         <lightning:input value="{!v.searchKeyWord}"
